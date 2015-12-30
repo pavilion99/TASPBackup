@@ -35,6 +35,8 @@ public class TASPBackup extends JavaPlugin {
 
     private static String ftpHost, ftpUser, ftpPass;
 
+    private static Server s;
+
     @Override
     public void onEnable() {
         serverDir = new File(new File(".").getAbsolutePath());
@@ -61,7 +63,7 @@ public class TASPBackup extends JavaPlugin {
         }
 
         try {
-            new Server();
+            s = new Server();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,7 +71,7 @@ public class TASPBackup extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        s.getServer().stop(0);
     }
 
     public static void startBackup(BackupType bz) {
