@@ -12,6 +12,10 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
         </repository>
+        <repository>
+            <id>tasp-repo</id>
+            <url>http://ci.spencercolton.tech/plugin/repository</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -37,6 +41,16 @@
             <artifactId>lombok</artifactId>
             <version>1.16.6</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>tech.spencercolton.tasp</groupId>
+            <artifactId>TASP</artifactId>
+            <version>0.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.4</version>
         </dependency>
     </dependencies>
     <build>

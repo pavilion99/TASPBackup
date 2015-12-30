@@ -1,0 +1,6 @@
+main: tech.spencercolton.tasp.backup.TASPBackup
+version: 0.0.1
+name: TASPBackup
+commands:
+  backup:
+    description: Start a backup.
