@@ -14,7 +14,7 @@
         </repository>
         <repository>
             <id>tasp-repo</id>
-            <url>http://ci.spencercolton.tech/plugin/repository</url>
+            <url>http://ci.spencercolton.tech/plugin/repository/everything</url>
         </repository>
     </repositories>
     <dependencies>
