@@ -1,5 +1,6 @@
 package tech.spencercolton.tasp.backup;
 
+import jdk.internal.util.xml.impl.Input;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,7 @@ import tech.spencercolton.tasp.backup.Web.Server;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Spencer Colton
@@ -37,6 +39,9 @@ public class TASPBackup extends JavaPlugin {
 
     private static Server s;
 
+    @Getter
+    private static String httpUsr, httpPass;
+
     @Override
     public void onEnable() {
         serverDir = new File(new File(".").getAbsolutePath());
@@ -51,6 +56,9 @@ public class TASPBackup extends JavaPlugin {
         ftpHost = this.getConfig().getString("ftp-host");
         ftpUser = this.getConfig().getString("ftp-user");
         ftpPass = this.getConfig().getString("ftp-pass");
+
+        httpUsr = this.getConfig().getString("http-user");
+        httpPass = this.getConfig().getString("http-pass");
 
         if(backupDestinationType == BackupDestinationType.LOCAL) {
             if (this.getConfig().getString("backup-dir-type").equalsIgnoreCase("relative"))

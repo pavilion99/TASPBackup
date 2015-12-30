@@ -3,6 +3,7 @@ package tech.spencercolton.tasp.backup.Web;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpServer;
 import lombok.Getter;
+import tech.spencercolton.tasp.backup.TASPBackup;
 import tech.spencercolton.tasp.backup.Web.Handlers.BackupStartHandler;
 import tech.spencercolton.tasp.backup.Web.Handlers.DashboardHandler;
 
@@ -30,8 +31,18 @@ public class Server {
     }
 
     private void createContexts(HttpServer s) {
-        HttpContext cxt = s.createContext("/startbackup", new BackupStartHandler());
-        // cxt.setAuthenticator(new Auth());
+        HttpContext cxt = s.createContext("/start-backup", new BackupStartHandler());
+        cxt.setAuthenticator(new Auth("start-backup"));
+
+        HttpContext abk = s.createContext("/start-backup-all", new BackupStartHandler());
+        abk.setAuthenticator(new Auth("start-backup-all"));
+
+        HttpContext wbk = s.createContext("/start-backup-worlds", new BackupStartHandler());
+        wbk.setAuthenticator(new Auth("start-backup-all"));
+
+        HttpContext pdbk = s.createContext("/start-backup-plugin-data", new BackupStartHandler());
+        pdbk.setAuthenticator(new Auth("start-backup-all"));
+
         s.createContext("/", new DashboardHandler());
         contexts.add(cxt);
     }

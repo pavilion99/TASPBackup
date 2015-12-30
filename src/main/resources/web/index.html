@@ -10,12 +10,48 @@
     <body>
         <div class="container">
             <nav class="navbar navbar-default">
-                <div class="conatiner-fluid">
-
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nv1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">TASPBackup</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="nv1">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="/start-backup">Start Backup</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </nav>
-            <h1>Congratulations!</h1>
-            <h4>TASPBackup server successfully started.</h4>
+            <div class="jumbotron">
+                <h1 id="backup-status"><!-- JAVA ADDS CONTENT HERE --></h1>
+                <p>
+                    <b>Running Jobs:</b>
+                    <br />
+                    <ul id="running-jobs">
+                        <!-- JAVA ADDS CONTENT HERE -->
+                    </ul>
+                    <br />
+                    <a class="btn btn-primary btn-lg" href="/start-backup">
+                        Start Default Backup
+                    </a>
+                    <a class="btn btn-success btn-lg" href="/start-backup-all">
+                        Start All Backup
+                    </a>
+                    <a class="btn btn-info btn-lg" href="/start-backup-plugin-data">
+                        Start Plugin Data Backup
+                    </a>
+                    <a class="btn btn-warning btn-lg" href="/start-backup-worlds">
+                        Start Worlds Backup
+                    </a>
+                </p>
+            </div>
         </div>
     </body>
 </html>

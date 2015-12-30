@@ -26,5 +26,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.16.6" level="project" />
     <orderEntry type="library" name="Maven: tech.spencercolton.tasp:TASP:0.0.3" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.4" level="project" />
+    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.8.3" level="project" />
   </component>
 </module>

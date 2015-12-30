@@ -4,6 +4,7 @@
     <root id="archive" name="TASPBackup.jar">
       <element id="module-output" name="TASPBackup" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-net/commons-net/3.4/commons-net-3.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jsoup/jsoup/1.8.3/jsoup-1.8.3.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

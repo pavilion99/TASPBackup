@@ -8,3 +8,6 @@ ftp-host: sdk.local.spencercolton.tech
 ftp-user: pavilion99
 ftp-pass: Spencer3899$
 ftp-backup-dir: backups
+
+http-user: pavilion99
+http-pass: Spencer3899$
