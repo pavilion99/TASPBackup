@@ -1,17 +1,25 @@
 package tech.spencercolton.tasp.backup.Scheduler;
 
+import com.sun.istack.internal.NotNull;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import tech.spencercolton.tasp.backup.Enums.BackupDestinationType;
 import tech.spencercolton.tasp.backup.Enums.BackupType;
 import tech.spencercolton.tasp.backup.TASPBackup;
 import tech.spencercolton.tasp.backup.Util.BackupDestination;
+import tech.spencercolton.tasp.backup.Util.FTP;
+import tech.spencercolton.tasp.backup.Util.JobStatus;
+import tech.spencercolton.tasp.backup.Util.Local;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * @author Spencer Colton
@@ -21,28 +29,53 @@ public class Job extends BukkitRunnable {
     @Getter
     private BackupType type;
 
+    @Getter
+    private BackupDestinationType dest;
 
-    public Job(BackupType type, BackupDestination b) {
+    private BackupDestination d;
+
+    private List<File> fileList;
+
+    @Getter
+    private UUID projUUID;
+
+    @Getter
+    private static Map<UUID, JobStatus> jobs = new HashMap<>();
+
+    public Job(BackupType type, @NotNull BackupDestination b) {
         this.type = type;
+        if(b instanceof FTP) {
+            this.dest = BackupDestinationType.FTP;
+        } else if(b instanceof Local) {
+            this.dest = BackupDestinationType.LOCAL;
+        } else {
+            this.dest = null;
+        }
+        this.d = b;
+
+        switch(this.type) {
+            case ALL: {
+                fileList = getAllFilesList();
+            }
+        }
+
+        this.projUUID = UUID.randomUUID();
+
+        this.runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("TASPBackup"));
+        jobs.put(this.projUUID, new JobStatus(fileList.size()));
     }
 
     @Override
     public void run() {
-        switch(this.type) {
-            case ALL: {
-                List<File> fs = getAllFilesList();
-
-                break;
-            }
-            case CONFIG: {
-
-            }
-            case WORLDS: {
-
-            }
-            case PLUGIN_DATA: {
-
-            }
+        for(int i = 0; i < fileList.size(); i++) {
+            Path p = TASPBackup.getServerDir().toPath().relativize(fileList.get(i).toPath());
+            String dir = "";
+            jobs.get(this.projUUID).update(i + 1, p.toString());
+            if(p.getParent() != null)
+                dir = p.getParent().toString();
+            else
+                dir = "";
+            this.d.uploadFile(fileList.get(i), dir);
         }
     }
 
@@ -50,7 +83,13 @@ public class Job extends BukkitRunnable {
         File f = TASPBackup.getServerDir();
         final List<File> files = new ArrayList<>();
         try {
-            Files.walk(Paths.get(f.getAbsolutePath())).filter(Files::isRegularFile).forEach(p -> files.add(p.toFile()));
+            Predicate<Path> p;
+            if(this.dest == BackupDestinationType.LOCAL) {
+                p = pg -> !Local.isInSubDirectory(new File(TASPBackup.getMasterBackupDir()), pg.toFile());
+            } else {
+                p = pg -> true;
+            }
+            Files.walk(Paths.get(f.getAbsolutePath())).filter(Files::isRegularFile).filter(p).forEach(h -> files.add(h.toFile()));
             return files;
         } catch(IOException e) {
             return null;

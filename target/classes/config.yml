@@ -1,1 +1,10 @@
-backup-type: local
+backup-type: all
+backup-destination: ftp
+
+backup-dir-type: relative
+backup-dir: backups
+
+ftp-host: sdk.local.spencercolton.tech
+ftp-user: pavilion99
+ftp-pass: Spencer3899$
+ftp-backup-dir: backups

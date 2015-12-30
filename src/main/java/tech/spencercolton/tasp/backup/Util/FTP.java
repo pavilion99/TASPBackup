@@ -3,6 +3,7 @@ package tech.spencercolton.tasp.backup.Util;
 import lombok.Getter;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
+import tech.spencercolton.tasp.backup.Enums.BackupDestinationType;
 import tech.spencercolton.tasp.backup.Enums.ConnectFailureReason;
 import tech.spencercolton.tasp.backup.Exception.FTPConnectException;
 
