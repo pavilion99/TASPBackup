@@ -57,6 +57,9 @@ public class Job extends BukkitRunnable {
             case ALL: {
                 fileList = getAllFilesList();
             }
+            case PLUGIN_DATA: {
+                fileList = getPluginDataFilesList();
+            }
         }
 
         this.projUUID = UUID.randomUUID();
@@ -75,8 +78,11 @@ public class Job extends BukkitRunnable {
                 dir = p.getParent().toString();
             else
                 dir = "";
-            this.d.uploadFile(fileList.get(i), dir);
+
+            if(!this.d.uploadFile(fileList.get(i), dir))
+                System.out.println("Warning: couldn't backup file " + fileList.get(i).toString());
         }
+        System.out.println("Backup completed! Backed up " + jobs.get(this.getProjUUID()).getTotal() + " files.");
     }
 
     private List<File> getAllFilesList() {
@@ -94,6 +100,24 @@ public class Job extends BukkitRunnable {
         } catch(IOException e) {
             return null;
         }
+    }
+
+    private List<File> getPluginDataFilesList() {
+        File f = TASPBackup.getServerDir();
+        final List<File> files = new ArrayList<>();
+        try {
+            Predicate<Path> p;
+            if(this.dest == BackupDestinationType.LOCAL) {
+                p = pg -> !Local.isInSubDirectory(new File(TASPBackup.getMasterBackupDir()), pg.toFile());
+            } else {
+                p = pg -> true;
+            }
+            Files.walk(Paths.get(f.getAbsolutePath())).filter(Files::isRegularFile).filter(p).filter(fz -> Local.isInSubDirectory(new File(TASPBackup.getServerDir(), "plugins"), fz.toFile())).filter(pz -> !pz.toString().toLowerCase().endsWith(".jar")).forEach(h -> files.add(h.toFile()));
+            return files;
+        } catch(IOException e) {
+            return null;
+        }
+
     }
 
 }

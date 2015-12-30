@@ -51,6 +51,7 @@
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>3.4</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <build>
@@ -67,5 +68,12 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.2</version>
+            </plugin>
+        </plugins>
     </build>
 </project>

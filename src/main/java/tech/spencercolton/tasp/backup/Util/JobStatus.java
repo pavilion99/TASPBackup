@@ -7,6 +7,7 @@ import lombok.Getter;
  */
 public class JobStatus {
 
+    @Getter
     private int total, current;
 
     @Getter

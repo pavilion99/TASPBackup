@@ -18,7 +18,7 @@ import java.io.IOException;
 public class BackupCmd implements CommandExecutor {
 
     @Getter
-    private final String syntax = "/backup";
+    private final String syntax = "/backup [backup-type]";
 
     @Getter
     public static final String name = "backup";
@@ -31,7 +31,16 @@ public class BackupCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command c, String label, String... args) {
-        TASPBackup.startBackup();
+        BackupType bz = TASPBackup.getBackupType();
+        if(args.length == 1) {
+            try {
+                bz = BackupType.valueOf(args[0].toUpperCase());
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage("Invalid backup type.");
+                return true;
+            }
+        }
+        TASPBackup.startBackup(bz);
         return true;
     }
 

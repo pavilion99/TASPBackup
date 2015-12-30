@@ -21,7 +21,23 @@ public class Local implements BackupDestination {
     public Local(File backupDir) throws IOException {
         if(backupDir.isDirectory()) {
             Calendar c = Calendar.getInstance();
-            this.thisBackupDir = new File(backupDir, "backup_" + c.get(Calendar.YEAR) + "_" + c.get(Calendar.MONTH) + "_" + c.get(Calendar.DAY_OF_MONTH) + "_" + c.get(Calendar.HOUR_OF_DAY) + "_" + c.get(Calendar.MINUTE) + "_" + c.get(Calendar.SECOND));
+            String year = Integer.toString(c.get(Calendar.YEAR));
+            String month = Integer.toString(c.get(Calendar.MONTH) + 1);
+            if(Integer.parseInt(month) < 10)
+                month = "0" + month;
+            String day = Integer.toString(c.get(Calendar.DAY_OF_MONTH));
+            if(Integer.parseInt(day) < 10)
+                day = "0" + day;
+            String hour = Integer.toString(c.get(Calendar.HOUR_OF_DAY));
+            if(Integer.parseInt(hour) < 10)
+                hour = "0" + hour;
+            String minute = Integer.toString(c.get(Calendar.MINUTE));
+            if(Integer.parseInt(minute) < 10)
+                minute = "0" + minute;
+            String seconds = Integer.toString(c.get(Calendar.SECOND));
+            if(Integer.parseInt(seconds) < 10)
+                seconds = "0" + seconds;
+            this.thisBackupDir = new File(backupDir, "backup_" + year + month + day + hour + minute + seconds);
             this.thisBackupDir.mkdirs();
         } else {
             throw new IOException("The backup location specified is not a directory.");

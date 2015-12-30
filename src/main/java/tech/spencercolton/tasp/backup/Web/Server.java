@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpServer;
 import lombok.Getter;
 import tech.spencercolton.tasp.backup.Web.Handlers.BackupStartHandler;
+import tech.spencercolton.tasp.backup.Web.Handlers.DashboardHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,13 +24,15 @@ public class Server {
 
     public Server() throws IOException {
         this.server = HttpServer.create(new InetSocketAddress(8080), 0);
-
+        createContexts(this.server);
+        server.setExecutor(null);
+        server.start();
     }
 
     private void createContexts(HttpServer s) {
         HttpContext cxt = s.createContext("/startbackup", new BackupStartHandler());
-        cxt.setAuthenticator(new Auth());
-
+        // cxt.setAuthenticator(new Auth());
+        s.createContext("/", new DashboardHandler());
         contexts.add(cxt);
     }
 
