@@ -40,7 +40,10 @@ public class Job extends BukkitRunnable {
     private UUID projUUID;
 
     @Getter
-    private static Map<UUID, JobStatus> jobs = new HashMap<>();
+    private JobStatus status;
+
+    @Getter
+    private static List<Job> jobs = new ArrayList<>();
 
     public Job(BackupType type, @NotNull BackupDestination b) {
         this.type = type;
@@ -56,16 +59,19 @@ public class Job extends BukkitRunnable {
         switch(this.type) {
             case ALL: {
                 fileList = getAllFilesList();
+                break;
             }
             case PLUGIN_DATA: {
                 fileList = getPluginDataFilesList();
+                break;
             }
         }
 
         this.projUUID = UUID.randomUUID();
 
         this.runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("TASPBackup"));
-        jobs.put(this.projUUID, new JobStatus(fileList.size()));
+        status = new JobStatus(fileList.size());
+        jobs.add(this);
     }
 
     @Override
@@ -73,7 +79,7 @@ public class Job extends BukkitRunnable {
         for(int i = 0; i < fileList.size(); i++) {
             Path p = TASPBackup.getServerDir().toPath().relativize(fileList.get(i).toPath());
             String dir = "";
-            jobs.get(this.projUUID).update(i + 1, p.toString());
+            this.status.update(i + 1, p.toString());
             if(p.getParent() != null)
                 dir = p.getParent().toString();
             else
@@ -82,7 +88,7 @@ public class Job extends BukkitRunnable {
             if(!this.d.uploadFile(fileList.get(i), dir))
                 System.out.println("Warning: couldn't backup file " + fileList.get(i).toString());
         }
-        System.out.println("Backup completed! Backed up " + jobs.get(this.getProjUUID()).getTotal() + " files.");
+        System.out.println("Backup completed! Backed up " + this.status.getTotal() + " files.");
     }
 
     private List<File> getAllFilesList() {
@@ -119,5 +125,15 @@ public class Job extends BukkitRunnable {
         }
 
     }
+
+    public static int getActiveJobs() {
+        int i = 0;
+        for(Job j : jobs) {
+            if(j.getStatus().getStatus() != JobStatus.StatusCode.DONE)
+                i++;
+        }
+        return i;
+    }
+
 
 }

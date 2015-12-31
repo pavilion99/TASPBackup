@@ -62,7 +62,7 @@ public class TASPBackup extends JavaPlugin {
 
         if(backupDestinationType == BackupDestinationType.LOCAL) {
             if (this.getConfig().getString("backup-dir-type").equalsIgnoreCase("relative"))
-                masterBackupDir = new File(masterBackupDir, this.getConfig().getString("backup-dir")).getAbsolutePath();
+                masterBackupDir = new File(serverDir, this.getConfig().getString("backup-dir")).getAbsolutePath();
             else if (this.getConfig().getString("backup-dir-type").equalsIgnoreCase("absolute"))
                 masterBackupDir = new File(this.getConfig().getString("backup-dir")).getAbsolutePath();
             new File(masterBackupDir).mkdirs();

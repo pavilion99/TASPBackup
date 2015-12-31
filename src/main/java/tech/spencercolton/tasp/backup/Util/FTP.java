@@ -68,8 +68,15 @@ public class FTP implements BackupDestination {
                 this.ftp.makeDirectory(File.separator + TASPBackup.getMasterBackupDir() + File.separator + this.backupDir + File.separator + remoteDir);
                 this.ftp.changeWorkingDirectory(File.separator + TASPBackup.getMasterBackupDir() + File.separator + this.backupDir + File.separator + remoteDir);
             }
-            return this.ftp.storeFile(f.getName(), i);
+            boolean b = false;
+            int h = 0;
+            while (!b && h < 3) {
+                b = this.ftp.storeFile(f.getName(), i);
+                h++;
+            }
+            return b;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
